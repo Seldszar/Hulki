@@ -1,0 +1,25 @@
+{
+  "compilerOptions": {
+    "noEmit": true,
+    "strict": true,
+    "target": "esnext",
+    "skipLibCheck": true,
+    "isolatedModules": true,
+    "resolveJsonModule": true,
+    "allowSyntheticDefaultImports": true,
+    "moduleResolution": "node",
+
+    "jsx": "preserve",
+    "jsxImportSource": "solid-js",
+
+    "types": [
+      "vite/client"
+    ],
+
+    "paths": {
+      "~/*": [
+        "./src/*"
+      ]
+    }
+  }
+}

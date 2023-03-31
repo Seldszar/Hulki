@@ -1,0 +1,11 @@
+# Port used by the server
+port = 3000
+
+# Steam Web API Key (https://steamcommunity.com/dev/apikey)
+key = ""
+
+# Steam ID to observe (SteamID64)
+steam_id = ""
+
+# Locale used for retrieving translated strings ("english", "french", ...)
+locale = "english"
