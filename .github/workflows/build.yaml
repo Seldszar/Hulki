@@ -5,7 +5,7 @@ on:
 
 jobs:
   build-web:
-    name: Build web
+    name: Build web project
     runs-on: ubuntu-latest
 
     defaults:
@@ -29,8 +29,14 @@ jobs:
           path: web/dist
 
   build:
-    name: Build
-    runs-on: windows-latest
+    name: Build (${{ matrix.os }}-${{ matrix.arch }})
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        os: ["linux", "windows"]
+        arch: ["amd64", "arm64"]
 
     needs:
       - build-web
@@ -46,6 +52,9 @@ jobs:
 
       - name: Build
         run: go build .
+        env:
+          GOOS: ${{ matrix.os }}
+          GOARCH: ${{ matrix.arch }}
 
       - name: Download web artifact
         uses: actions/download-artifact@v2
@@ -56,8 +65,9 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-artifact@v3
         with:
-          name: artifact
+          name: build-${{ matrix.os }}-${{ matrix.arch }}
           path: |
             web/dist
             config.toml
             hulki.exe
+            hulki
