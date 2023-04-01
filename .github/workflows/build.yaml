@@ -1,0 +1,63 @@
+name: Release
+
+on:
+  - push
+
+jobs:
+  build-web:
+    name: Build web
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: web
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build
+        run: npm run build
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: artifact-web
+          path: web/dist
+
+  build:
+    name: Build
+    runs-on: windows-latest
+
+    needs:
+      - build-web
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup Go
+        uses: actions/setup-go@v4
+        with:
+          go-version-file: go.mod
+
+      - name: Build
+        run: go build .
+
+      - name: Download web artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: artifact-web
+          path: web/dist
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: artifact
+          path: |
+            web/dist
+            config.toml
+            hulki.exe
